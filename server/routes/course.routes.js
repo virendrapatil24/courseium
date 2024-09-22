@@ -20,6 +20,10 @@ courseRouter.delete("/delete", CourseController.deleteCourse);
 courseRouter.post("/preview", CourseController.previewCourse);
 
 // purchase course
-courseRouter.post("/purchase", CourseController.purchaseCourse);
+courseRouter.post(
+  "/purchase",
+  isAuthenticated,
+  CourseController.purchaseCourse
+);
 
 export default courseRouter;
