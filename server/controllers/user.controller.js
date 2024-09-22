@@ -1,5 +1,6 @@
-import { hash } from "bcrypt";
+import { compare, hash } from "bcrypt";
 import { User } from "../models/user.js";
+import { generateToken } from "../utils/authentication.js";
 
 export async function createUser(req, res) {
   try {
@@ -18,7 +19,7 @@ export async function createUser(req, res) {
     }
 
     const hashedPassword = await hash(password, 10);
-    await User.create({
+    const newUser = new User({
       username: usernameLowerCase,
       email: emailLowerCase,
       password: hashedPassword,
@@ -26,13 +27,52 @@ export async function createUser(req, res) {
       firstName,
     });
 
-    res.status(201).json({ message: "User signed up successfully" });
+    await newUser.save();
+
+    const { error, token } = generateToken({ id: newUser._id.toString() });
+    if (error) {
+      res.status(400).json({ error });
+      return;
+    }
+
+    console.log(token);
+    res
+      .status(201)
+      .json({ message: "User signed up successfully", authToken: token });
   } catch (err) {
     res.status(500).json({ message: "Error while signing up" });
   }
 }
 
-export function logInUser(req, res) {}
+export async function logInUser(req, res) {
+  try {
+    const { username, password } = req.body;
+
+    const currentUser = await User.findOne({ username });
+    if (!currentUser) {
+      res.status(400).json({ message: "user not found" });
+    }
+
+    const isPasswordValid = await compare(password, currentUser.password);
+    if (!isPasswordValid) {
+      res.status(401).json({ message: "invalid password" });
+    }
+
+    const { error, decoded } = generateToken({
+      id: currentUser._id.toString(),
+    });
+    if (error) {
+      res.status(400).json({ error });
+      return;
+    }
+
+    res
+      .status(201)
+      .json({ message: "User logged in successfully", authToken: decoded });
+  } catch (error) {
+    res.status(500).json({ error: "Unable to log in user" });
+  }
+}
 
 export function getUserCourses(req, res) {}
 
