@@ -58,7 +58,7 @@ export async function logInUser(req, res) {
       res.status(401).json({ message: "invalid password" });
     }
 
-    const { error, decoded } = generateToken({
+    const { error, token } = generateToken({
       id: currentUser._id.toString(),
     });
     if (error) {
@@ -68,7 +68,7 @@ export async function logInUser(req, res) {
 
     res
       .status(201)
-      .json({ message: "User logged in successfully", authToken: decoded });
+      .json({ message: "User logged in successfully", authToken: token });
   } catch (error) {
     res.status(500).json({ error: "Unable to log in user" });
   }

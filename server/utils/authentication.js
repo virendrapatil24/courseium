@@ -25,13 +25,14 @@ export function verifyToken(token) {
 }
 
 export function isAuthenticated(req, res, next) {
-  const { authToken } = req.headers;
+  const { token } = req.headers;
 
-  if (!authToken) {
+  if (!token) {
     res.status(401).json({ error: "Access denied, no token provided" });
+    return;
   }
 
-  const { error, decoded } = verifyToken(authToken);
+  const { error, decoded } = verifyToken(token);
 
   if (error) {
     res.status(400).json({ error });

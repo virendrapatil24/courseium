@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as CourseController from "./../controllers/course.controller.js";
+import { isAuthenticated } from "../utils/authentication.js";
 
 const courseRouter = Router();
 
@@ -7,7 +8,7 @@ const courseRouter = Router();
 courseRouter.get("/", CourseController.getAllCourses);
 
 // create course
-courseRouter.post("/create", CourseController.createCourse);
+courseRouter.post("/create", isAuthenticated, CourseController.createCourse);
 
 // update course
 courseRouter.put("/update", CourseController.updateCourse);
