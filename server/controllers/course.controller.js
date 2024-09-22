@@ -32,18 +32,8 @@ export function previewCourse(req, res) {}
 
 export async function purchaseCourse(req, res) {
   try {
-    const { courseId } = req.body;
-
-    const coursePurchased = await Course.findOne({
-      _id: courseId,
-    });
-    if (!coursePurchased) {
-      res.status(400).json({ message: "course not found" });
-      return;
-    }
-
     // user cannot purchase own course
-    if (req.user.id === coursePurchased.instructor._id.toString()) {
+    if (req.user.id === req.coursePurchased.instructor._id.toString()) {
       res.status(403).json({ message: "you cannot purchase your own course" });
       return;
     }
@@ -51,7 +41,7 @@ export async function purchaseCourse(req, res) {
     // course already purchased
     const courseAlreadyPurchased = await Purchase.findOne({
       user: req.user.id,
-      course: coursePurchased._id,
+      course: req.coursePurchased._id,
     });
     if (courseAlreadyPurchased) {
       res.status(403).json({ message: "course already purchased" });
@@ -60,7 +50,7 @@ export async function purchaseCourse(req, res) {
 
     const purchase = new Purchase({
       user: req.user.id,
-      course: coursePurchased._id,
+      course: req.coursePurchased._id,
     });
 
     await purchase.save();
