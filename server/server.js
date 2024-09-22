@@ -9,6 +9,8 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/course", courseRouter);
 
 async function main() {
-  await connect("");
-  app.listen(3000);
+  await connect(process.env.MONGO_URL);
+  app.listen(process.env.PORT);
 }
+
+main();
