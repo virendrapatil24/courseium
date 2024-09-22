@@ -24,16 +24,40 @@ export async function createCourse(req, res) {
   }
 }
 
-export function updateCourse(req, res) {}
+export async function updateCourse(req, res) {
+  try {
+    const { title, description, price, imageURL, category } = req.body;
 
-export function deleteCourse(req, res) {}
+    if (title) req.course.title = title;
+    if (description) req.course.description = description;
+    if (price) req.course.price = price;
+    if (imageURL !== undefined) req.course.imageURL = imageURL;
+    if (category) req.course.category = category;
+
+    await req.course.save();
+
+    res.status(200).json({ message: "Course updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "unable to update the course", error });
+  }
+}
+
+export async function deleteCourse(req, res) {
+  try {
+    await req.course.deleteOne();
+
+    res.status(200).json({ message: "Course deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "unable to delete the course", error });
+  }
+}
 
 export function previewCourse(req, res) {}
 
 export async function purchaseCourse(req, res) {
   try {
     // user cannot purchase own course
-    if (req.user.id === req.coursePurchased.instructor._id.toString()) {
+    if (req.user.id === req.course.instructor._id.toString()) {
       res.status(403).json({ message: "you cannot purchase your own course" });
       return;
     }
@@ -41,7 +65,7 @@ export async function purchaseCourse(req, res) {
     // course already purchased
     const courseAlreadyPurchased = await Purchase.findOne({
       user: req.user.id,
-      course: req.coursePurchased._id,
+      course: req.course._id,
     });
     if (courseAlreadyPurchased) {
       res.status(403).json({ message: "course already purchased" });
@@ -50,7 +74,7 @@ export async function purchaseCourse(req, res) {
 
     const purchase = new Purchase({
       user: req.user.id,
-      course: req.coursePurchased._id,
+      course: req.course._id,
     });
 
     await purchase.save();

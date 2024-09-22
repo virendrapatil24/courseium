@@ -1,41 +1,31 @@
 import { Course } from "../models/course.js";
 
 export async function isUserCourseInstructor(req, res, next) {
-  const userId = req.user.id;
-  const courseId = req.coursePurchased._id;
+  try {
+    if (req.course.instructor.toString() !== req.user.id) {
+      res.status(403).json({ message: "you don't own this course" });
+      return;
+    }
 
-  const courseMatch = await Course.findOne({
-    _id: courseId,
-    instructor: userId,
-  });
-  if (!courseMatch) {
-    res.status(403).json({ message: "you don't own this course" });
-    return;
+    next();
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
   }
-
-  next();
 }
 
 export async function isCourseValid(req, res, next) {
-  const { courseId } = req.body;
-  const { coursePurchased, error } = await checkCourse(courseId);
+  try {
+    const { courseId } = req.params;
+    const course = await Course.findById(courseId);
 
-  if (error) {
-    res.status(400).json({ error });
-    return;
+    if (!course) {
+      res.status(400).json({ error: "course not found" });
+      return;
+    }
+
+    req.course = course;
+    next();
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
   }
-
-  req.coursePurchased = coursePurchased;
-  next();
-}
-
-export async function checkCourse(courseId) {
-  const coursePurchased = await Course.findOne({
-    _id: courseId,
-  });
-  if (!coursePurchased) {
-    return { error: "course not found" };
-  }
-
-  return { coursePurchased };
 }
