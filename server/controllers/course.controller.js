@@ -1,7 +1,14 @@
 import { Course } from "../models/course.js";
 import { Purchase } from "../models/purchase.js";
 
-export function getAllCourses(req, res) {}
+export async function getAllCourses(req, res) {
+  try {
+    const courses = await Course.find();
+    res.status(200).json({ message: "courses fetched successfully", courses });
+  } catch (error) {
+    res.status(500).json({ message: "unable to fetch courses", error });
+  }
+}
 
 export async function createCourse(req, res) {
   try {
@@ -20,7 +27,7 @@ export async function createCourse(req, res) {
 
     res.status(201).json({ message: "course created successfully" });
   } catch (error) {
-    res.status(500).json({ message: "unable to create course" });
+    res.status(500).json({ message: "unable to create course", error });
   }
 }
 
@@ -52,7 +59,16 @@ export async function deleteCourse(req, res) {
   }
 }
 
-export function previewCourse(req, res) {}
+export function previewCourse(req, res) {
+  try {
+    res.status(200).json({
+      message: "course details fetched successfully",
+      course: req.course,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "unable to fetch the course", error });
+  }
+}
 
 export async function purchaseCourse(req, res) {
   try {
