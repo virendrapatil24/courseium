@@ -9,4 +9,18 @@ const UserSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+UserSchema.statics.findByEmailAndUsername =
+  async function findByEmailAndUsername(email, username) {
+    const user = this;
+    const query = {
+      $or: [{ email }, { username }],
+    };
+    const foundUser = await user
+      .findOne(query)
+      .collation({ locale: "en", strength: 2 })
+      .exec();
+
+    return foundUser;
+  };
+
 export const User = model("User", UserSchema);
