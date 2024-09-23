@@ -3,7 +3,7 @@ import { Course } from "../models/course.js";
 export async function isUserCourseInstructor(req, res, next) {
   try {
     if (req.course.instructor.toString() !== req.user.id) {
-      res.status(403).json({ message: "you don't own this course" });
+      res.status(403).json({ message: "You don't own this course" });
       return;
     }
 
@@ -15,11 +15,11 @@ export async function isUserCourseInstructor(req, res, next) {
 
 export async function isCourseValid(req, res, next) {
   try {
-    const { courseId } = req.params;
+    const { courseId } = req.query;
     const course = await Course.findById(courseId);
 
     if (!course) {
-      res.status(400).json({ error: "course not found" });
+      res.status(400).json({ error: "Course not found" });
       return;
     }
 

@@ -41,8 +41,8 @@ export async function createUser(req, res) {
     res
       .status(201)
       .json({ message: "User signed up successfully", authToken: token });
-  } catch (err) {
-    res.status(500).json({ message: "Error while signing up" });
+  } catch (error) {
+    res.status(500).json({ message: "Error while signing up", error });
   }
 }
 
@@ -52,12 +52,12 @@ export async function logInUser(req, res) {
 
     const currentUser = await User.findOne({ username });
     if (!currentUser) {
-      res.status(400).json({ message: "user not found" });
+      res.status(400).json({ message: "User not found" });
     }
 
     const isPasswordValid = await compare(password, currentUser.password);
     if (!isPasswordValid) {
-      res.status(401).json({ message: "invalid password" });
+      res.status(401).json({ message: "Invalid password" });
     }
 
     const { error, token } = generateToken({
@@ -72,7 +72,7 @@ export async function logInUser(req, res) {
       .status(201)
       .json({ message: "User logged in successfully", authToken: token });
   } catch (error) {
-    res.status(500).json({ error: "Unable to log in user" });
+    res.status(500).json({ message: "Unable to log in user", error });
   }
 }
 
@@ -83,9 +83,9 @@ export async function getUserCourses(req, res) {
     });
     res
       .status(200)
-      .json({ message: "fetched user courses successfully", userCourses });
+      .json({ message: "Fetched user courses successfully", userCourses });
   } catch (error) {
-    res.status(500).json({ message: "unable to get user courses", error });
+    res.status(500).json({ message: "Unable to get user courses", error });
   }
 }
 
@@ -97,9 +97,9 @@ export async function getUserLearnings(req, res) {
     });
     res
       .status(200)
-      .json({ message: "fetched user learnings successfully", userLearnings });
+      .json({ message: "Fetched user learnings successfully", userLearnings });
   } catch (error) {
-    res.status(500).json({ message: "unable to get user learnings", error });
+    res.status(500).json({ message: "Unable to get user learnings", error });
   }
 }
 
@@ -108,8 +108,8 @@ export async function getUserPurchases(req, res) {
     const userPurchases = await Purchase.find({ user: req.user.id });
     res
       .status(200)
-      .json({ message: "fetched user purchases successfully", userPurchases });
+      .json({ message: "Fetched user purchases successfully", userPurchases });
   } catch (error) {
-    res.status(500).json({ message: "unable to get user purchases", error });
+    res.status(500).json({ message: "Unable to get user purchases", error });
   }
 }

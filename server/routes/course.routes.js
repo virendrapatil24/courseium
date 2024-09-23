@@ -30,7 +30,7 @@ courseRouter.delete(
 );
 
 // preview course
-courseRouter.post("/preview", isCourseValid, CourseController.previewCourse);
+courseRouter.get("/preview", isCourseValid, CourseController.previewCourse);
 
 // purchase course
 courseRouter.post(

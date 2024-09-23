@@ -25,9 +25,9 @@ export async function createCourse(req, res) {
 
     await newCourse.save();
 
-    res.status(201).json({ message: "course created successfully" });
+    res.status(201).json({ message: "Course created successfully" });
   } catch (error) {
-    res.status(500).json({ message: "unable to create course", error });
+    res.status(500).json({ message: "Unable to create course", error });
   }
 }
 
@@ -45,7 +45,7 @@ export async function updateCourse(req, res) {
 
     res.status(200).json({ message: "Course updated successfully" });
   } catch (error) {
-    res.status(500).json({ message: "unable to update the course", error });
+    res.status(500).json({ message: "Unable to update the course", error });
   }
 }
 
@@ -55,7 +55,7 @@ export async function deleteCourse(req, res) {
 
     res.status(200).json({ message: "Course deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: "unable to delete the course", error });
+    res.status(500).json({ message: "Unable to delete the course", error });
   }
 }
 
@@ -96,7 +96,7 @@ export async function purchaseCourse(req, res) {
     await purchase.save();
 
     res.status(201).json({ message: "purchase done successfully" });
-  } catch (e) {
-    res.status(500).json({ message: "unable to make a purchase", error: e });
+  } catch (error) {
+    res.status(500).json({ message: "unable to make a purchase", error });
   }
 }
