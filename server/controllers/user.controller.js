@@ -1,5 +1,7 @@
 import { compare, hash } from "bcrypt";
 import { User } from "../models/user.js";
+import { Course } from "../models/course.js";
+import { Purchase } from "../models/purchase.js";
 import { generateToken } from "../utils/authentication.js";
 
 export async function createUser(req, res) {
@@ -74,8 +76,40 @@ export async function logInUser(req, res) {
   }
 }
 
-export function getUserCourses(req, res) {}
+export async function getUserCourses(req, res) {
+  try {
+    const userCourses = await Course.find({
+      instructor: req.user.id,
+    });
+    res
+      .status(200)
+      .json({ message: "fetched user courses successfully", userCourses });
+  } catch (error) {
+    res.status(500).json({ message: "unable to get user courses", error });
+  }
+}
 
-export function getUserLearnings(req, res) {}
+export async function getUserLearnings(req, res) {
+  try {
+    const userPurchases = await Purchase.find({ user: req.user.id });
+    const userLearnings = await Course.find({
+      _id: { $in: userPurchases.map((purchase) => purchase.course) },
+    });
+    res
+      .status(200)
+      .json({ message: "fetched user learnings successfully", userLearnings });
+  } catch (error) {
+    res.status(500).json({ message: "unable to get user learnings", error });
+  }
+}
 
-export function getUserPurchases(req, res) {}
+export async function getUserPurchases(req, res) {
+  try {
+    const userPurchases = await Purchase.find({ user: req.user.id });
+    res
+      .status(200)
+      .json({ message: "fetched user purchases successfully", userPurchases });
+  } catch (error) {
+    res.status(500).json({ message: "unable to get user purchases", error });
+  }
+}
