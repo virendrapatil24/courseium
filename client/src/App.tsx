@@ -1,5 +1,12 @@
+import NavigationBar from "./components/NavigationBar";
+
 const App = () => {
-  return <div>App</div>;
+  return (
+    <div>
+      <NavigationBar />
+      App
+    </div>
+  );
 };
 
 export default App;
