@@ -1,10 +1,11 @@
+import HeroSection from "./components/HeroSection";
 import NavigationBar from "./components/NavigationBar";
 
 const App = () => {
   return (
     <div>
       <NavigationBar />
-      App
+      <HeroSection />
     </div>
   );
 };
