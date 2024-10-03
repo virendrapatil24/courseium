@@ -7,7 +7,7 @@ const HeroSection = () => {
       <div className="flex items-center justify-between py-8 px-40 w-full h-full space-x-20">
         <div className="flex flex-col space-y-8 h-full p-8">
           <div className="text-4xl">Empower Your Skills</div>
-          <div className="text-gray-600">
+          <div className="mt-2 leading-8 text-gray-600">
             Discover a range of high-quality, in-demand courses designed to
             elevate your knowledge and career. Learn at your own pace from
             industry experts.
