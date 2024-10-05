@@ -1,16 +1,13 @@
-import FeatureSection from "./components/FeatureSection";
-import FooterSection from "./components/FooterSection";
-import HeroSection from "./components/HeroSection";
-import NavigationBar from "./components/NavigationBar";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import LandingPage from "./components/LandingPage";
 
 const App = () => {
   return (
-    <div>
-      <NavigationBar />
-      <HeroSection />
-      <FeatureSection />
-      <FooterSection />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+      </Routes>
+    </Router>
   );
 };
 
