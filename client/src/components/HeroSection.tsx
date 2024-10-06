@@ -3,7 +3,7 @@ import HeroImage1 from "./../assets/hero1.png";
 
 const HeroSection = () => {
   return (
-    <div className="flex items-center mt-16 bg-violet-100">
+    <div className="flex items-center bg-violet-100">
       <div className="flex items-center justify-between py-8 px-40 w-full h-full space-x-20">
         <div className="flex flex-col space-y-8 h-full p-8">
           <div className="text-4xl">Empower Your Skills</div>
